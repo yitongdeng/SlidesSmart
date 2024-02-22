@@ -103,8 +103,21 @@ else:
 print("segment starts: ", segment_starts)
 print("segment ends: ", segment_ends)
 
-from process_video import *
-create_text_video(video_dir, matches, segment_starts, segment_ends)
+gen_video = False
+if gen_video:
+    from process_video import *
+    create_text_video(video_dir, matches, segment_starts, segment_ends)
+
+segment_contents = re.findall(r'Segment\s+\d+:\s*(.*)', data)
+
+segments = []
+for i in range(len(segment_contents)):
+    segments.append({"words": segment_contents[i], "start": segment_starts[i], "end": segment_ends[i]})
+
+with open(os.path.join(video_dir, "segments_processed.json"), 'w') as f:
+  json.dump(segments, f, ensure_ascii=False)
+
+
 
 
 
