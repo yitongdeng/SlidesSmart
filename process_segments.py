@@ -37,6 +37,8 @@ import re
 
 # Regular expression to find content within double quotes
 matches = re.findall(r'"(.*?)"', data)
+matches = [m.lower() for m in matches]
+print("matches: ", matches)
 
 # Returns number of words in string
 def countWords(string):
@@ -100,6 +102,9 @@ else:
 
 print("segment starts: ", segment_starts)
 print("segment ends: ", segment_ends)
+
+from process_video import *
+create_text_video(video_dir, matches, segment_starts, segment_ends)
 
 
 
