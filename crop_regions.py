@@ -2,8 +2,16 @@ import os
 import shutil
 from copy import deepcopy
 import cv2
+import json
 
-bboxes = [(361, 361, 533, 533), (595, 555, 671, 619)] # this is to be changed
+video_dir = "slides_collection/149_1_65_graphics"
+
+# Opening JSON file
+f = open(os.path.join(video_dir, "DINO_boxes.json"))
+ 
+# returns JSON object as 
+# a dictionary
+bboxes = json.load(f)
 
 video_dir = "slides_collection/149_1_65_graphics"
 
