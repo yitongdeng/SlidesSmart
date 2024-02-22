@@ -201,6 +201,20 @@ def find_infimum(sorted_list, target):
     
     return result, result_index
 
+import textwrap
+
+def draw_text(img, text, pos, font, max_width, font_scale, font_thickness, text_color, bg_color):    
+    (text_width, text_height), baseline = cv2.getTextSize(text, font, fontScale=font_scale, thickness=font_thickness)
+    line_height = text_height + baseline + 10  # Calculate line height
+
+    wrapper = textwrap.TextWrapper(width=max_width, break_long_words = False) 
+    lines = wrapper.wrap(text = text) # Split the text into lines based on the max width
+
+    for i, line in enumerate(lines):
+        (text_width, text_height), baseline = cv2.getTextSize(line, font, fontScale=font_scale, thickness=font_thickness)
+        line_y = pos[1] + i * line_height  # Calculate the y position for each line
+        cv2.putText(img, line, (pos[0]-int(0.5*text_width), line_y), font, font_scale, text_color, font_thickness, lineType=cv2.LINE_AA)
+
 def create_text_video(root_dir, texts, starts, ends):
     video_name = os.path.join(root_dir, 'tmp_video.mp4')
     final_video_name = os.path.join(root_dir, 'text_video.mp4')
@@ -228,8 +242,10 @@ def create_text_video(root_dir, texts, starts, ends):
         # print(end)
         # print(idx)
         if idx>=0 and t <= end:
-            canvas_copy = cv2.putText(canvas_copy, texts[idx], (int(width/2), int(height/2)), cv2.FONT_HERSHEY_SIMPLEX,  
-                    2, (230, 230, 230), 2, cv2.LINE_AA) 
+            max_width = 50
+            draw_text(canvas_copy, texts[idx], (int(width/2-0.5*max_width), int(height/2)), \
+                    cv2.FONT_HERSHEY_SIMPLEX, max_width, 1, 2, (230, 230, 230), (0,0,0))
+
         video.write(canvas_copy)
 
     cv2.destroyAllWindows()
