@@ -13,8 +13,6 @@ f = open(os.path.join(video_dir, "DINO_boxes.json"))
 # a dictionary
 bboxes = json.load(f)
 
-video_dir = "slides_collection/149_1_65_graphics"
-
 dir_name = os.path.join(video_dir, "proposed_regions")
 if os.path.exists(dir_name):
     shutil.rmtree(dir_name)
