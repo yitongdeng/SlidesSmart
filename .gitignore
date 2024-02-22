@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+GroundingDINO/
+slides_collection/
 
 # C extensions
 *.so
