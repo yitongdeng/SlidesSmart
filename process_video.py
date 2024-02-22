@@ -254,43 +254,42 @@ def create_text_video(root_dir, texts, starts, ends):
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
 
+def create_image_video(root_dir, base_slide, slides, starts, ends):
+    video_name = os.path.join(root_dir, 'tmp_video.mp4')
+    final_video_name = os.path.join(root_dir, 'image_video.mp4')
+    
+    video_source = os.path.join(root_dir, 'video.mp4')
+    num_frames, fps, duration = get_video_length(video_source)
+    print("num_frames: ", num_frames)
+    print("fps: ", fps)
+    print("duration: ", duration)
+    width = base_slide.shape[1]
+    height = base_slide.shape[0]
+    canvas = np.zeros([height, width, 3]).astype(np.uint8)
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(video_name, fourcc, fps, (width,height))
+    for i in range(num_frames):
+        t = i / fps
+        if i%1 == 0:
+            print("Processing: ", i, " with t: ", t)
+            
+        canvas_copy = deepcopy(canvas)
+        # find what text to display
+        start, idx = find_infimum(starts, t)
+        end = ends[idx]
+        # print(start)
+        # print(end)
+        # print(idx)
+        if idx>=0 and t <= end:
+            canvas_copy[:, :] = slides[idx][:, :]
+        else:
+            canvas_copy[:, :] = base_slide[:, :]
 
-    # images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]
-    # images.sort(key=lambda f: int(''.join(filter(str.isdigit, f))))
-    # frame = canvas #cv2.imread(os.path.join(image_folder, images[0]))
-    # height, width, layers = frame.shape
-    # fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    # video = cv2.VideoWriter(video_name, fourcc, 30.0, (width,height))
+        video.write(canvas_copy)
 
-    # num_frames = len(images)
-    # for i in range(num_frames + 10):
-    # #for i in range(200):
-    # #for i in range(1300, 1398):
-    #     if i%1 == 0:
-    #         print("Processing: ", i)
-    #     canvas_copy = deepcopy(canvas)
+    cv2.destroyAllWindows()
+    video.release()
+    audio = ffmpeg.input(os.path.join(root_dir, 'audio.wav'))
+    video = ffmpeg.input(video_name)
+    ffmpeg.output(audio, video, final_video_name).run()
 
-    #     # overlay lecture video
-    #     img_name = images[min(i, len(images)-1)]
-    #     image = cv2.imread(os.path.join(image_folder, img_name))
-    #     lecture_h, lecture_w = image.shape[0], image.shape[1]
-    #     h_begin = int((height-lecture_h)/2)
-    #     canvas_copy[h_begin:h_begin+lecture_h, -lecture_w:] = image
-
-    #     # overlay slide
-    #     slide = cv2.imread('../assets/sample_1/slide.jpg')
-    #     slide_masked = comp_slide(slide, i, num_frames, ts, bs)
-    #     #print(slide.shape)
-    #     slide_w = width - lecture_w
-    #     slide_h = int(slide_w * (slide.shape[0] / slide.shape[1]))
-    #     slide_resized = cv2.resize(slide_masked, (slide_w, slide_h))
-    #     h_begin = int((height-slide_h)/2)
-    #     canvas_copy[h_begin:h_begin+slide_h, :slide_w] = slide_resized
-
-    #     video.write(canvas_copy)
-
-    # cv2.destroyAllWindows()
-    # video.release()
-    # audio = ffmpeg.input('../assets/sample_1/audio.wav')
-    # video = ffmpeg.input(video_name)
-    # ffmpeg.output(audio, video, final_video_name).run()

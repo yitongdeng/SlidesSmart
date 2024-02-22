@@ -39,3 +39,17 @@ for i in range(len(matched_bboxes)):
     highlighteds.append(slide_copy)
     cv2.imwrite(os.path.join(dir_name, str(i)+'.jpg'), slide_copy)
 
+f = open(os.path.join(video_dir, "segments_processed.json"))
+ 
+data = json.load(f)
+
+starts = []
+ends = []
+for d in data:
+    starts.append(d["start"])
+    ends.append(d["end"])
+
+print("starts: ", len(starts))
+print("ends: ", len(ends))
+
+create_image_video(video_dir, slide, highlighteds, starts, ends)
