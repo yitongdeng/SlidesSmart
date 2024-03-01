@@ -57,7 +57,7 @@ th {
 
 .videoWrapper {
   position: relative;
-  padding-bottom: 56.0%;
+  padding-bottom: 28.0%;
   /* 16:9 */
   /* padding-top: 10px; */
   height: 0;
@@ -68,7 +68,12 @@ th {
   top: 0;
   left: 0;
   width: 50%;
-  height: 50%;
+  height: 100%;
+}
+
+#imageHolder {
+  width: 50%;
+  border: 1px solid pink;
 }
 
 

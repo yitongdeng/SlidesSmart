@@ -39,13 +39,13 @@ function populate_table(jsonObj, table) {
     
   }
 
-fetch("http://192.168.50.97:8080/words.json")
+fetch("http://127.0.0.1:8080/words.json")
   .then(response => response.json())
   .then(data => {
     obj = populate_text(data, document.getElementById('transcribed_paragraph'));
    });
 
-fetch("http://192.168.50.97:8080/segments_processed.json")
+fetch("http://127.0.0.1:8080/segments_processed.json")
    .then(response => response.json())
    .then(data => {
      obj = populate_table(data, document.getElementById('registerTable'));
