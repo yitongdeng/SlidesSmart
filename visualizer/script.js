@@ -51,20 +51,3 @@ fetch("http://127.0.0.1:8080/segments_processed.json")
      obj = populate_table(data, document.getElementById('registerTable'));
     });
 
-  // const table = document.getElementById('registerTable');
-  // const row = document.createElement('tr');
-  // row.innerHTML = `
-  // <td>
-  // #${1}
-  // </td>
-  // <td>
-  // ${2}
-  // </td>
-  // <td>
-  // (${3}, ${4})
-  // </td>`;
-  // // You could also do the same for the cells and inputs
-  // table.appendChild(row);
-
-// // const result = extractAndConcatenateWords(obj);
-// console.log(obj.count); // Output: "Hello World Foo Bar End
