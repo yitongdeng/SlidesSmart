@@ -6,8 +6,9 @@
 
 #table_holder {
   position:relative;
-  display: flex;
+  display: block;
   width: 100%;
+  height: 400px;
   border: 1px solid violet;
 }
 
@@ -17,18 +18,22 @@ table {
   font-family: 'Courier Prime';font-size: 15px;
   width: 100%; 
   table-layout: fixed;
+  display: block;
 }
 
 table.fixed {table-layout:fixed;}/*Setting the table width is important!*/
 table.fixed td {overflow:hidden;}/*Hide text outside the cell.*/
-table.fixed td:nth-of-type(1) {width:50%;}/*Setting the width of column 1.*/
-table.fixed td:nth-of-type(2) {width:25%;}/*Setting the width of column 2.*/
-table.fixed td:nth-of-type(3) {width:25%;}/*Setting the width of column 3.*/
+table.fixed td:nth-of-type(1) {width:10%;}
+table.fixed td:nth-of-type(2) {width:70%;}
+table.fixed td:nth-of-type(3) {width:10%;}
+table.fixed td:nth-of-type(4) {width:10%;}
 
 table.fixed th {overflow:hidden;}/*Hide text outside the cell.*/
-table.fixed th:nth-of-type(1) {width:50%;}/*Setting the width of column 1.*/
-table.fixed th:nth-of-type(2) {width:25%;}/*Setting the width of column 2.*/
-table.fixed th:nth-of-type(3) {width:25%;}/*Setting the width of column 3.*/
+table.fixed th:nth-of-type(1) {width:10%;}
+table.fixed th:nth-of-type(2) {width:70%;}
+table.fixed th:nth-of-type(3) {width:10%;}
+table.fixed th:nth-of-type(4) {width:10%;}
+
 
 td { 
   border: 1px solid black; 
@@ -43,11 +48,30 @@ th {
 
 #registerTable {
   width: 100%;
+  height: 100%;
   overflow-y: scroll;
   border: 1px solid red;
   align-items: center;
   text-align: center;
 }
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.0%;
+  /* 16:9 */
+  /* padding-top: 10px; */
+  height: 0;
+}
+
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 50%;
+}
+
+
 
 
 #centerRow {
