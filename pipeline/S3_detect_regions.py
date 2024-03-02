@@ -8,3 +8,5 @@ def detect_regions(indir, outdir):
             -o {outdir} \
             -t "diagrams . modules . text ." \
             --cpu-only')
+  
+  

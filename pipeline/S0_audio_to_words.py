@@ -7,7 +7,7 @@ def audio_to_words(indir, outdir):
   client = OpenAI()
 
   # open audio file
-  audio_file = open(os.path.join(indir, "video.mp4"), "rb")
+  audio_file = open(os.path.join(indir, "audio.wav"), "rb")
 
   # use whisper to generate transcription
   transcript = client.audio.transcriptions.create(

@@ -19,10 +19,11 @@ if __name__ == "__main__":
 
     os.makedirs(outdir, exist_ok=True)
 
-    # audio_to_words(indir, outdir)
-    # words_to_segments(indir, outdir)
-    # process_segments(indir, outdir)
-    # detect_regions(indir, outdir)
+    audio_to_words(indir, outdir)
+    words_to_segments(indir, outdir)
+    process_segments(indir, outdir)
+    detect_regions(indir, outdir)
+    prune_regions(indir, outdir)
     crop_regions(indir, outdir)
     caption_regions(indir, outdir)
     match_lecture_slide(indir, outdir)
