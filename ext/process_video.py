@@ -231,7 +231,7 @@ def create_text_video(root_dir, texts, starts, ends):
     video = cv2.VideoWriter(video_name, fourcc, fps, (width,height))
     for i in range(num_frames):
         t = i / fps
-        if i%1 == 0:
+        if i%100 == 0:
             print("Processing: ", i, " with t: ", t)
             
         canvas_copy = deepcopy(canvas)
@@ -253,12 +253,13 @@ def create_text_video(root_dir, texts, starts, ends):
     audio = ffmpeg.input(os.path.join(root_dir, 'audio.wav'))
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
+    os.remove(video_name)
 
-def create_image_video(root_dir, base_slide, slides, starts, ends):
-    video_name = os.path.join(root_dir, 'tmp_video.mp4')
-    final_video_name = os.path.join(root_dir, 'image_video.mp4')
+def create_image_video(indir, outdir, base_slide, slides, starts, ends):
+    video_name = os.path.join(outdir, 'tmp_video.mp4')
+    final_video_name = os.path.join(outdir, 'image_video.mp4')
     
-    video_source = os.path.join(root_dir, 'video.mp4')
+    video_source = os.path.join(indir, 'video.mp4')
     num_frames, fps, duration = get_video_length(video_source)
     print("num_frames: ", num_frames)
     print("fps: ", fps)
@@ -270,7 +271,7 @@ def create_image_video(root_dir, base_slide, slides, starts, ends):
     video = cv2.VideoWriter(video_name, fourcc, fps, (width,height))
     for i in range(num_frames):
         t = i / fps
-        if i%1 == 0:
+        if i%100 == 0:
             print("Processing: ", i, " with t: ", t)
             
         canvas_copy = deepcopy(canvas)
@@ -289,7 +290,8 @@ def create_image_video(root_dir, base_slide, slides, starts, ends):
 
     cv2.destroyAllWindows()
     video.release()
-    audio = ffmpeg.input(os.path.join(root_dir, 'audio.wav'))
+    audio = ffmpeg.input(os.path.join(indir, 'audio.wav'))
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
+    os.remove(video_name)
 
