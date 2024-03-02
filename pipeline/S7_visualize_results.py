@@ -17,7 +17,7 @@ def visualize_results(indir, outdir):
         bbox_idxs.append(idx)
 
     # Opening JSON file
-    f = open(os.path.join(outdir, "DINO_boxes.json"))
+    f = open(os.path.join(outdir, "pruned_boxes.json"))
     
     # returns JSON object as 
     # a dictionary
