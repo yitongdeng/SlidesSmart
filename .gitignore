@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 GroundingDINO/
 slides_collection/
+results/
 
 # C extensions
 *.so
