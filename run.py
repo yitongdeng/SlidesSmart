@@ -45,6 +45,7 @@ if __name__ == "__main__":
         # match_lecture_slide(indir, outdir)
         #print("+++ Generate Output Video +++")
         #visualize_results(indir, outdir)
+        exit()
 
 
 

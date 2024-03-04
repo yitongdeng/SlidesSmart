@@ -78,9 +78,15 @@ def prune_regions(indir, outdir):
     f = open(os.path.join(outdir, "DINO_boxes.json"))
     data = json.load(f)
 
+    f2 = open(os.path.join(outdir, "OCR_boxes.json"))
+    data2 = json.load(f2)
+
     bboxes = []
     certainties = []
     for d in data:
+        bboxes.append(d["box"])
+        certainties.append(d["certainty"])
+    for d in data2:
         bboxes.append(d["box"])
         certainties.append(d["certainty"])
 
@@ -99,7 +105,7 @@ def prune_regions(indir, outdir):
             new_bboxes.append(b)
             new_certainties.append(c)
     
-    bboxes, _ = nms(new_bboxes, new_certainties, 0.5)
+    bboxes, _ = nms(new_bboxes, new_certainties, 0.3)
 
     # Draw bounding boxes and confidence score after non-maximum supression
     for (start_x, start_y, end_x, end_y) in bboxes:
