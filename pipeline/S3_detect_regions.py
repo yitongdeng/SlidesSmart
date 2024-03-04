@@ -6,7 +6,7 @@ def detect_regions(indir, outdir):
             -p ext/GroundingDINO/weights/groundingdino_swint_ogc.pth \
             -i {indir}/slide.jpg \
             -o {outdir} \
-            -t "diagrams . modules . text ." \
+            -t "object . equation ." \
             --cpu-only')
   
   

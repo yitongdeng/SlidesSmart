@@ -76,7 +76,13 @@ def nms(bounding_boxes, confidence_score, threshold):
 def prune_regions(indir, outdir):
     # Opening JSON file
     f = open(os.path.join(outdir, "DINO_boxes.json"))
-    bboxes = json.load(f)
+    data = json.load(f)
+
+    bboxes = []
+    certainties = []
+    for d in data:
+        bboxes.append(d["box"])
+        certainties.append(d["certainty"])
 
     img = cv2.imread(os.path.join(indir, "slide.jpg"))
     imgsize = img.shape[0] * img.shape[1]
@@ -84,12 +90,16 @@ def prune_regions(indir, outdir):
     print("before prune: ", len(bboxes))
 
     new_bboxes = []
-    for b in bboxes:
+    new_certainties = []
+    for i in range(len(bboxes)):
+        b = bboxes[i]
+        c = certainties[i]
         area_b = (b[2]-b[0]) * (b[3]-b[1])
         if area_b * 4 < imgsize:
             new_bboxes.append(b)
+            new_certainties.append(c)
     
-    bboxes, _ = nms(new_bboxes, [0.2 for _ in new_bboxes], 0.5)
+    bboxes, _ = nms(new_bboxes, new_certainties, 0.5)
 
     # Draw bounding boxes and confidence score after non-maximum supression
     for (start_x, start_y, end_x, end_y) in bboxes:
