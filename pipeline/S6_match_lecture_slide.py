@@ -44,7 +44,7 @@ def match_lecture_slide(indir, outdir):
 
     Please provide your answer in the following format: The most relevant sentence on the slide is: [index of the most relevant section]. 
 
-    Please always find a match, even if all slide sections are reletively unrelated to the lecture.
+    If no reasonable match can be found, please simply output: The most relevant sentence on the slide is: -1.
 
     Think step by step. Also make sure to provide a short (less than 100 words) analysis for why you think the match is appropriate. Emphasize what you think the professor is saying, and the slide is saying, and why they are relevant.
     '''

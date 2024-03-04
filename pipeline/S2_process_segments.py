@@ -73,21 +73,29 @@ def process_segments(indir, outdir):
 
     aggregate_words2 = aggregate_words2[:-1].lower()
 
+    success = True
+
     # this is to make sure the strings match
     if aggregate_words == aggregate_words2:
         print("The original and processed paragraph DOES match")
     else:
         print("The original and processed paragraph DOESN'T match")
+        print("words after: ", aggregate_words2)
+        print("words before: ", aggregate_words)
+        success = False
 
     # this is to make sure that the division into words match
     if total_words == len(starts):
         print("Number of words DOES match")
     else:
         print("Number of words DOESN'T match")
+        print("num words after: ", total_words)
+        print("num words before: ", len(starts))
+        success = False
 
     gen_video = True
     if gen_video:
-        create_text_video(indir, matches, segment_starts, segment_ends)
+        create_text_video(indir, outdir, matches, segment_starts, segment_ends)
 
     segment_contents = re.findall(r'Segment\s+\d+:\s*(.*)', data)
 
@@ -97,6 +105,9 @@ def process_segments(indir, outdir):
 
     with open(os.path.join(outdir, "segments_processed.json"), 'w') as f:
         json.dump(segments, f, ensure_ascii=False)
+    
+
+    return success
 
 
 

@@ -215,11 +215,11 @@ def draw_text(img, text, pos, font, max_width, font_scale, font_thickness, text_
         line_y = pos[1] + i * line_height  # Calculate the y position for each line
         cv2.putText(img, line, (pos[0]-int(0.5*text_width), line_y), font, font_scale, text_color, font_thickness, lineType=cv2.LINE_AA)
 
-def create_text_video(root_dir, texts, starts, ends):
-    video_name = os.path.join(root_dir, 'tmp_video.mp4')
-    final_video_name = os.path.join(root_dir, 'text_video.mp4')
+def create_text_video(indir, outdir, texts, starts, ends):
+    video_name = os.path.join(outdir, 'tmp_video.mp4')
+    final_video_name = os.path.join(outdir, 'text_video.mp4')
     
-    video_source = os.path.join(root_dir, 'video.mp4')
+    video_source = os.path.join(indir, 'video.mp4')
     num_frames, fps, duration = get_video_length(video_source)
     print("num_frames: ", num_frames)
     print("fps: ", fps)
@@ -250,7 +250,7 @@ def create_text_video(root_dir, texts, starts, ends):
 
     cv2.destroyAllWindows()
     video.release()
-    audio = ffmpeg.input(os.path.join(root_dir, 'audio.wav'))
+    audio = ffmpeg.input(os.path.join(indir, 'audio.wav'))
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
     os.remove(video_name)

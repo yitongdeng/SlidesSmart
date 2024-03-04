@@ -105,7 +105,7 @@ def prune_regions(indir, outdir):
             new_bboxes.append(b)
             new_certainties.append(c)
     
-    bboxes, _ = nms(new_bboxes, new_certainties, 0.3)
+    bboxes, _ = nms(new_bboxes, new_certainties, 0.5)
 
     # Draw bounding boxes and confidence score after non-maximum supression
     for (start_x, start_y, end_x, end_y) in bboxes:
