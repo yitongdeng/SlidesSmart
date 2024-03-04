@@ -95,8 +95,8 @@ def merge_horizontal(bboxes, centers, words):
 
 # input: image
 # output: 1. list of bounding boxes  2. list of texts
-def get_bboxes(img):
-    vis_dir = "bbox_vis"
+def get_bboxes(img, outdir = "."):
+    vis_dir = os.path.join(outdir, "bbox_vis")
     os.makedirs(vis_dir, exist_ok=True)
 
     bboxes = []

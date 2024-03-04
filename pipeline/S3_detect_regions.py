@@ -13,7 +13,7 @@ def detect_regions(indir, outdir):
 
   bboxes_json = []
   slide_img = cv2.imread(os.path.join(indir, "slide.jpg"))
-  bboxes, slide_texts = get_bboxes(slide_img)
+  bboxes, slide_texts = get_bboxes(slide_img, outdir)
   for b in bboxes:
     bboxes_json.append({"box": b, "certainty": 1.0})
   img1 = paint_bboxes(slide_img, bboxes, os.path.join(outdir, "OCR_preds.jpg"))
