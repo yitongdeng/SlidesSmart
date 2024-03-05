@@ -7,7 +7,7 @@ function submit(input) {
      obj = populate_table(data, document.getElementById('registerTable'));
     });
 
-  fetch(`http://127.0.0.1:8080/${input}/segments_processed.json`)
+  fetch(`http://127.0.0.1:8080/${input}/captions.json`)
     .then(response => response.json())
     .then(data => {
       obj = populate_caption_table(data, document.getElementById('captionTable'), input);
@@ -89,13 +89,10 @@ function populate_caption_table(jsonObj, table, input) {
         #${idx}
         </td>
         <td>
-        <img src = "http://127.0.0.1:8080/${input}/proposed_regions/${idx}.jpg" width = "300" >
+        <img src = "http://127.0.0.1:8080/${input}/proposed_regions/${idx}.jpg" style="max-height:100px; max-width:300px; height:auto; width:auto;">
         </td>
         <td>
-        ${Math.round(obj["start"]*1000)/1000}
-        </td>
-        <td>
-        ${Math.round(obj["end"]*1000)/1000}
+        ${obj}
         </td>`;
         // You could also do the same for the cells and inputs
         table.appendChild(row);
