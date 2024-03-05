@@ -7,6 +7,12 @@ function submit(input) {
      obj = populate_table(data, document.getElementById('registerTable'));
     });
 
+  fetch(`http://127.0.0.1:8080/${input}/segments_processed.json`)
+    .then(response => response.json())
+    .then(data => {
+      obj = populate_caption_table(data, document.getElementById('captionTable'), input);
+     });
+
   var container = document.getElementById("finalVideoWrapper");
   container.innerHTML = "";
   var video = document.createElement('video');
@@ -74,3 +80,28 @@ function populate_table(jsonObj, table) {
     
   }
 
+function populate_caption_table(jsonObj, table, input) {
+  let idx = 0;
+  jsonObj.forEach(obj => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>
+        #${idx}
+        </td>
+        <td>
+        <img src = "http://127.0.0.1:8080/${input}/proposed_regions/${idx}.jpg" width = "300" >
+        </td>
+        <td>
+        ${Math.round(obj["start"]*1000)/1000}
+        </td>
+        <td>
+        ${Math.round(obj["end"]*1000)/1000}
+        </td>`;
+        // You could also do the same for the cells and inputs
+        table.appendChild(row);
+        idx += 1;
+  });
+    
+  }
+
+submit("149_2_14_table")
