@@ -22,7 +22,7 @@ function submit(input) {
      .then(response => response.json())
      .then(data2 => {
       //console.log(data2); // Process the second batch of data
-      populate_match_table_2(data2, document.getElementById('matchTable'));
+      populate_match_table_2(data2, document.getElementById('matchTable'), input);
     });
      //.then(obj => populate_match_table_2(document.getElementById('matchTable')));
     
@@ -140,13 +140,19 @@ function populate_caption_table(jsonObj, table, input) {
       
     }
 
-  function populate_match_table_2(data, table) {
-    console.log(table.rows.length);
+  function populate_match_table_2(data, table, input) {
+    //console.log(table.rows.length);
+    const regex = 'The most relevant sentence on the slide is: (.*)\.';
     for (var i = 0; i < table.rows.length-1; i++) {
       let testCell = document.getElementById(`match${i}justication`);
-      testCell.innerHTML = "LKR 100";
+      testCell.innerHTML = data[i];
       let testCell2 = document.getElementById(`match${i}image`);
-      testCell2.innerHTML = "LKR 200";
+      const matches = data[i].match(regex);
+      let match = parseInt(matches[1], 10); 
+      console.log(match);
+      if (match >= 0){
+        testCell2.innerHTML = `<img src = "http://127.0.0.1:8080/${input}/proposed_regions/${match}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">`;
+      }
       //onsole.log(data[i])
    }
   }
