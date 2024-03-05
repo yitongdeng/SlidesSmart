@@ -13,6 +13,14 @@ function submit(input) {
       obj = populate_caption_table(data, document.getElementById('captionTable'), input);
      });
 
+  fetch(`http://127.0.0.1:8080/${input}/segments_processed.json`)
+     .then(response => response.json())
+     .then(data => {
+       obj = populate_match_table_1(data, document.getElementById('matchTable'));
+      });
+  
+  populate_match_table_2()
+
   var container = document.getElementById("finalVideoWrapper");
   container.innerHTML = "";
   var video = document.createElement('video');
@@ -89,7 +97,7 @@ function populate_caption_table(jsonObj, table, input) {
         #${idx}
         </td>
         <td>
-        <img src = "http://127.0.0.1:8080/${input}/proposed_regions/${idx}.jpg" style="max-height:100px; max-width:300px; height:auto; width:auto;">
+        <img src = "http://127.0.0.1:8080/${input}/proposed_regions/${idx}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">
         </td>
         <td>
         ${obj}
@@ -99,6 +107,35 @@ function populate_caption_table(jsonObj, table, input) {
         idx += 1;
   });
     
+  }
+
+  function populate_match_table_1(jsonObj, table) {
+    let idx = 0;
+    jsonObj.forEach(obj => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+          <td>
+          #${idx}
+          </td>
+          <td>
+          ${obj["words"]}
+          </td>
+          <td>
+          NA
+          </td>
+          <td id = "testID">
+          NA
+          </td>`;
+          // You could also do the same for the cells and inputs
+          table.appendChild(row);
+          idx += 1;
+    });
+      
+    }
+
+  function populate_match_table_2() {
+    testCell = document.getElementById('testID');
+    testCell.innerHTML = "LKR 100";
   }
 
 submit("149_2_14_table")
