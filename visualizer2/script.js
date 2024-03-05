@@ -16,9 +16,15 @@ function submit(input) {
   fetch(`http://127.0.0.1:8080/${input}/segments_processed.json`)
      .then(response => response.json())
      .then(data => {
-       obj = populate_match_table_1(data, document.getElementById('matchTable'));
+       populate_match_table_1(data, document.getElementById('matchTable'));
+       return fetch(`http://127.0.0.1:8080/${input}/matched_result.json`);
       })
-     .then(obj => populate_match_table_2(document.getElementById('matchTable')));
+     .then(response => response.json())
+     .then(data2 => {
+      //console.log(data2); // Process the second batch of data
+      populate_match_table_2(data2, document.getElementById('matchTable'));
+    });
+     //.then(obj => populate_match_table_2(document.getElementById('matchTable')));
     
   
 
@@ -134,12 +140,14 @@ function populate_caption_table(jsonObj, table, input) {
       
     }
 
-  function populate_match_table_2(table) {
-    for (var i = 0, row; row = table.rows[i]; i++) {
+  function populate_match_table_2(data, table) {
+    console.log(table.rows.length);
+    for (var i = 0; i < table.rows.length-1; i++) {
       let testCell = document.getElementById(`match${i}justication`);
       testCell.innerHTML = "LKR 100";
       let testCell2 = document.getElementById(`match${i}image`);
       testCell2.innerHTML = "LKR 200";
+      //onsole.log(data[i])
    }
   }
 
