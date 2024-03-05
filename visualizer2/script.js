@@ -17,9 +17,10 @@ function submit(input) {
      .then(response => response.json())
      .then(data => {
        obj = populate_match_table_1(data, document.getElementById('matchTable'));
-      });
+      })
+     .then(obj => populate_match_table_2(document.getElementById('matchTable')));
+    
   
-  populate_match_table_2()
 
   var container = document.getElementById("finalVideoWrapper");
   container.innerHTML = "";
@@ -120,10 +121,10 @@ function populate_caption_table(jsonObj, table, input) {
           <td>
           ${obj["words"]}
           </td>
-          <td>
+          <td id = "match${idx}image">
           NA
           </td>
-          <td id = "testID">
+          <td id = "match${idx}justication">
           NA
           </td>`;
           // You could also do the same for the cells and inputs
@@ -133,9 +134,13 @@ function populate_caption_table(jsonObj, table, input) {
       
     }
 
-  function populate_match_table_2() {
-    testCell = document.getElementById('testID');
-    testCell.innerHTML = "LKR 100";
+  function populate_match_table_2(table) {
+    for (var i = 0, row; row = table.rows[i]; i++) {
+      let testCell = document.getElementById(`match${i}justication`);
+      testCell.innerHTML = "LKR 100";
+      let testCell2 = document.getElementById(`match${i}image`);
+      testCell2.innerHTML = "LKR 200";
+   }
   }
 
 submit("149_2_14_table")
