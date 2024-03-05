@@ -169,7 +169,7 @@ def create_video(ts, bs):
 
     cv2.destroyAllWindows()
     video.release()
-    audio = ffmpeg.input('../assets/sample_1/audio.wav')
+    audio = ffmpeg.input('../assets/sample_1/audio.mp3')
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
 
@@ -250,7 +250,7 @@ def create_text_video(indir, outdir, texts, starts, ends):
 
     cv2.destroyAllWindows()
     video.release()
-    audio = ffmpeg.input(os.path.join(indir, 'audio.wav'))
+    audio = ffmpeg.input(os.path.join(indir, 'audio.mp3'))
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
     os.remove(video_name)
@@ -290,7 +290,7 @@ def create_image_video(indir, outdir, base_slide, slides, starts, ends):
 
     cv2.destroyAllWindows()
     video.release()
-    audio = ffmpeg.input(os.path.join(indir, 'audio.wav'))
+    audio = ffmpeg.input(os.path.join(indir, 'audio.mp3'))
     video = ffmpeg.input(video_name)
     ffmpeg.output(audio, video, final_video_name).run()
     os.remove(video_name)

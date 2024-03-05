@@ -85,9 +85,10 @@ def caption_regions(indir, outdir):
             answers.append(answer)
 
             print("answer: ", answer)
-        except:
+        except Exception as error:
             answers.append("Null as region may contain safety issues.")
             print("ChatGPT refuse to process image: ", i)
+            print("Exception: \n", error)
 
     with open(os.path.join(outdir, "captions.json"), 'w') as f:
         json.dump(answers, f, ensure_ascii=False)

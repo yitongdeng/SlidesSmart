@@ -14,7 +14,7 @@ def visualize_results(indir, outdir):
 
     bbox_idxs = []
     for d in data:
-        idx = int(re.findall(r'The most relevant sentence on the slide is: (.*)', d)[0][:-1])
+        idx = int(re.findall(r'The most relevant sentence on the slide is: (.*)\.', d)[0])
         bbox_idxs.append(idx)
 
     # Opening JSON file

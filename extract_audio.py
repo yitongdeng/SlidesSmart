@@ -6,7 +6,7 @@ if __name__ == "__main__":
         if name[0] == ".": # .DS_Store
             continue
         indir = os.path.join("slides_collection", name)
-        os.system(f'ffmpeg -n -i {indir}/video.mp4 -ab 160k -ac 2 -ar 44100 -vn {indir}/audio.wav')
+        os.system(f'ffmpeg -y -i {indir}/video.mp4 -ab 160k -ac 2 -ar 44100 -vn {indir}/audio.mp3')
 
 
 
