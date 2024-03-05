@@ -1,0 +1,60 @@
+<head>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Courier Prime' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        document
+            .addEventListener("DOMContentLoaded",
+                function () {
+                    // Code to be executed when the DOM is ready
+                    console.log("DOM ready!");
+                });
+    </script>
+</head>
+<body>
+    <input type="text" id="test"  value="" />
+    <button onclick="submit(document.getElementById('test').value)" id="testButton">Submit Response</button>
+    <hr>
+    <div class="videoWrapper" id="finalVideoWrapper">
+        <video id="finalVideo" width = "1000" src="" controls>
+        </video>
+    </div>
+
+    <hr>
+
+    <div id="table_holder">
+        <table class = "fixed" id="registerTable">
+            <thead>
+                <tr>    
+                    <th>Index</th>
+                    <th>Text Segment</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="videoWrapper" id="textVideoWrapper">
+        <video id="textVideo" width = "1000" src="" controls>
+        </video>
+    </div>
+
+    <hr>
+
+    <div class="imageWrapper" id="DINOproposalwrapper">
+        <img src = "" width = "1000" id="DINOproposal">
+    </div>
+    <div class="imageWrapper" id="OCRproposalwrapper">
+        <img src = "" width = "1000" id="OCRproposal">
+    </div>
+    <div class="imageWrapper" id="Finalproposalwrapper">
+        <img src = "" width = "1000" id="Finalproposal">
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
