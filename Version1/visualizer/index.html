@@ -13,16 +13,33 @@
     </script>
 </head>
 <body>
+    <h1>Select Example</h1>
+    <h4>Available Example Names:</h4>
+    <ul id = "list">
+        <li>149_2_14_table</li>
+        <li>149_1_65_graphics</li>
+        <li>248_10_59_equation</li>
+        <li>149_13_16_timeline</li>
+        <li>149_1_31_schematics</li>
+        <li>149_1_52_plot</li>
+        <li>149_7_37_code</li>
+        <li>149_13_19_timeline</li>
+        <li>248_5_49_graphics</li>
+        <li>248_10_76_graphics</li>
+        <li>248_11_10_equation</li>
+    </ul>
     <input type="text" id="test"  value="" />
-    <button onclick="submit(document.getElementById('test').value)" id="testButton">Submit Response</button>
+    <button onclick="submit(document.getElementById('test').value)" id="testButton">Submit</button>
+    
     <hr>
+    <h1>Final Result</h1>
     <div class="videoWrapper" id="finalVideoWrapper">
         <video id="finalVideo" width = "1000" src="" controls>
         </video>
     </div>
 
     <hr>
-
+    <h1>Lecture Segmentation</h1>
     <div id="table_holder">
         <table class = "fixed" id="registerTable">
             <thead>
@@ -42,18 +59,23 @@
     </div>
 
     <hr>
+    <h1>Slide Segmentation</h1>
 
+    <h3>DINO Proposals</h3>
     <div class="imageWrapper" id="DINOproposalwrapper">
         <img src = "" width = "1000" id="DINOproposal">
     </div>
+    <h3>OCR Proposals</h3>
     <div class="imageWrapper" id="OCRproposalwrapper">
         <img src = "" width = "1000" id="OCRproposal">
     </div>
+    <h3>Final Proposals</h3>
     <div class="imageWrapper" id="Finalproposalwrapper">
         <img src = "" width = "1000" id="Finalproposal">
     </div>
 
     <hr>
+    <h1>Region Captioning</h1>
     <div id="table_holder">
         <table class = "fixed2" id="captionTable">
             <thead>
@@ -67,6 +89,7 @@
     </div>
 
     <hr>
+    <h1>Region-Slide Matching</h1>
     <div id="table_holder2">
         <table class = "fixed3" id="matchTable">
             <thead>

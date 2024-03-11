@@ -88,7 +88,6 @@ th {
 
 .videoWrapper {
   position: relative;
-  border: 1px solid red;
 }
 
 .videoWrapper iframe {

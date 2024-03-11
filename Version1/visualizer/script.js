@@ -72,6 +72,7 @@ function populate_text(jsonObj, textbox) {
 }
 
 function populate_table(jsonObj, table) {
+  table.innerHTML = "";
   let idx = 0;
   jsonObj.forEach(obj => {
         const row = document.createElement('tr');
@@ -96,6 +97,7 @@ function populate_table(jsonObj, table) {
   }
 
 function populate_caption_table(jsonObj, table, input) {
+  table.innerHTML = "";
   let idx = 0;
   jsonObj.forEach(obj => {
         const row = document.createElement('tr');
@@ -117,6 +119,7 @@ function populate_caption_table(jsonObj, table, input) {
   }
 
   function populate_match_table_1(jsonObj, table) {
+    table.innerHTML = "";
     let idx = 0;
     jsonObj.forEach(obj => {
           const row = document.createElement('tr');
@@ -143,13 +146,13 @@ function populate_caption_table(jsonObj, table, input) {
   function populate_match_table_2(data, table, input) {
     //console.log(table.rows.length);
     const regex = 'The most relevant sentence on the slide is: (.*)\.';
-    for (var i = 0; i < table.rows.length-1; i++) {
+    for (var i = 0; i < table.rows.length; i++) {
       let testCell = document.getElementById(`match${i}justication`);
       testCell.innerHTML = data[i];
       let testCell2 = document.getElementById(`match${i}image`);
       const matches = data[i].match(regex);
       let match = parseInt(matches[1], 10); 
-      console.log(match);
+      //console.log(match);
       if (match >= 0){
         testCell2.innerHTML = `<img src = "http://127.0.0.1:8080/${input}/proposed_regions/${match}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">`;
       }
@@ -157,4 +160,4 @@ function populate_caption_table(jsonObj, table, input) {
    }
   }
 
-submit("149_2_14_table")
+submit("149_2_14_table");
