@@ -2,6 +2,7 @@ from pipeline.S0_audio_to_words import *
 from pipeline.S2_process_words import *
 from pipeline.presegment import *
 from pipeline.ask_GPT import *
+from pipeline.parse_GPT import *
 
 import argparse
 import os
@@ -19,7 +20,8 @@ if __name__ == "__main__":
     #group_words(indir, outdir)
     
     #presegment_slide(indir, outdir)
-    ask_GPT_for_answer(indir, outdir)
+    #ask_GPT_for_answer(indir, outdir)
+    parse_GPT_answer(indir, outdir)
 
     # # print("+++ Audio to Words +++")
     # # audio_to_segments(indir, outdir)

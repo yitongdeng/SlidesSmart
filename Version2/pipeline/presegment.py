@@ -4,6 +4,9 @@ import numpy as np
 from copy import deepcopy
 import math
 
+line_thick = 3
+n_horizotnal = 8
+n_vertical = 5
 
 def presegment_slide(indir, outdir):
     slide = cv2.imread(os.path.join(indir, 'slide.jpg'))
@@ -13,9 +16,6 @@ def presegment_slide(indir, outdir):
 
     height, width, _ = slide.shape
 
-    line_thick = 3
-    n_horizotnal = 8
-    n_vertical = 5
     for i in range(n_horizotnal+1):
         x = int(i * width / n_horizotnal)
         slide = cv2.line(slide, (x,0), (x, height-1), (0, 255, 0), thickness=line_thick)
