@@ -59,7 +59,7 @@ def parse_GPT_answer(indir, outdir):
         ends.append(d["end"])
 
 
-    segment_cells = re.findall(r'refers to region (.*?)\,', gpt_answer)
+    segment_cells = re.findall(r'refers to region[s]* (.*?)[, ]', gpt_answer)
     segment_contents = re.findall(r'Segment \d+: "(.*?)"', gpt_answer)
 
     # fixes mismatch between GPT segments and whisper words
