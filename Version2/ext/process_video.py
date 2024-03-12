@@ -269,6 +269,8 @@ def create_image_video(indir, outdir, base_slide, slides, starts, ends):
     canvas = np.zeros([height, width, 3]).astype(np.uint8)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video = cv2.VideoWriter(video_name, fourcc, fps, (width,height))
+    print("starts: ", starts)
+
     for i in range(num_frames):
         t = i / fps
         if i%100 == 0:
@@ -286,12 +288,12 @@ def create_image_video(indir, outdir, base_slide, slides, starts, ends):
         else:
             canvas_copy[:, :] = base_slide[:, :]
 
-        video.write(canvas_copy)
+    #     video.write(canvas_copy)
 
-    cv2.destroyAllWindows()
-    video.release()
-    audio = ffmpeg.input(os.path.join(indir, 'audio.mp3'))
-    video = ffmpeg.input(video_name)
-    ffmpeg.output(audio, video, final_video_name).run()
-    os.remove(video_name)
+    # cv2.destroyAllWindows()
+    # video.release()
+    # audio = ffmpeg.input(os.path.join(indir, 'audio.mp3'))
+    # video = ffmpeg.input(video_name)
+    # ffmpeg.output(audio, video, final_video_name).run()
+    # os.remove(video_name)
 

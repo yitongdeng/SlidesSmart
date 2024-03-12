@@ -32,10 +32,10 @@ def group_words(indir, outdir):
             word = words[i]
 
         if i+1 < len(words):
-            if starts[i+1] - ends[i] > 0.5:
+            if starts[i+1] - ends[i] > 0.3:
                 aggregate_words += word + ". "
                 capital_next = True
-            elif starts[i+1] - ends[i] > 0.1:
+            elif starts[i+1] - ends[i] > 0.05:
                 aggregate_words += word + ", "
             else:
                 aggregate_words += word + " "
@@ -67,7 +67,7 @@ def ask_GPT_for_answer(indir, outdir):
         messages=[
             {"role": "system", "content": 
             '''
-            You are a helpful teaching assistant in a Computer Science class. You are presented with a slide along with a transcription of the professor's lecture about this slide. Based on your understanding of text and image, your job is to break up the transcription into segments and match each segment to a slide region as separated by green lines and labeled by green text.
+            You are a helpful teaching assistant in a Computer Science class. You are presented with a slide along with a transcription of the professor's lecture about this slide. Based on your understanding of text and image, your job is to break up the transcription into segments (roughly 5 to 50 words) and match each segment to a slide region as separated by green lines and labeled by green text.
 
             '''},
             {

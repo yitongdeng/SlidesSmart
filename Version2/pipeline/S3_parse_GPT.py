@@ -4,7 +4,7 @@ import requests
 import cv2
 import json
 import re
-from .presegment import *
+from .S0_presegment import *
 import copy
 import shutil
 from ext.process_video import *
