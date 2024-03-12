@@ -17,7 +17,10 @@ def group_words(indir, outdir):
     words = []
 
     for d in data:
-        words.append(d["word"].lower())
+        word = d["word"]
+        if word == "": 
+            word = "percent"
+        words.append(word.lower())
         starts.append(d["start"])
         ends.append(d["end"])
     

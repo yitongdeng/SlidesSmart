@@ -15,9 +15,13 @@ if __name__ == "__main__":
 
     os.makedirs(outdir, exist_ok=True)
 
-    #presegment_slide(indir, outdir)
-    #audio_to_words(indir, outdir)
-    #ask_GPT_for_answer(indir, outdir)
+    # print("+++ Presegment +++")
+    # presegment_slide(indir, outdir)
+    # print("+++ Audio to words +++")
+    # audio_to_words(indir, outdir)
+    # print("+++ Ask GPT +++")
+    # ask_GPT_for_answer(indir, outdir)
+    print("+++ Parse GPT +++")
     parse_GPT_answer(indir, outdir)
 
     # # print("+++ Audio to Words +++")
