@@ -1,3 +1,5 @@
+from pipeline.S0_audio_to_words import *
+from pipeline.S2_process_words import *
 from pipeline.presegment import *
 from pipeline.ask_GPT import *
 
@@ -13,8 +15,11 @@ if __name__ == "__main__":
 
     os.makedirs(outdir, exist_ok=True)
 
+    #audio_to_words(indir, outdir)
+    process_words(indir, outdir)
+    
     #presegment_slide(indir, outdir)
-    ask_GPT_for_answer(indir, outdir)
+    #ask_GPT_for_answer(indir, outdir)
 
     # # print("+++ Audio to Words +++")
     # # audio_to_segments(indir, outdir)
