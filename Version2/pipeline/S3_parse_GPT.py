@@ -97,14 +97,17 @@ def parse_GPT_answer(indir, outdir):
     print("segment cells: ", segment_cells)
     segment_bboxes = []
     for c in segment_cells:
-        j = int(ord(c[0])) - 65
-        i = int(c[1])
-        print("j: ", j)
-        print("i: ", i)
-        x0 = int(i * width / n_horizotnal)
-        y0 = int(j * height / n_vertical)
-        x1 = int((i+1) * width / n_horizotnal)
-        y1 = int((j+1) * height / n_vertical)
+        cs = c.split("-")
+        print(cs)
+        j0 = int(ord(cs[0][0])) - 65 # x0, y0 depend on the first entry
+        i0 = int(cs[0][1])
+        j1 = int(ord(cs[-1][0])) - 65 # x1, y1 depend on the last entry
+        i1 = int(cs[-1][1])
+
+        x0 = int(i0 * width / n_horizotnal)
+        y0 = int(j0 * height / n_vertical)
+        x1 = int((i1+1) * width / n_horizotnal)
+        y1 = int((j1+1) * height / n_vertical)
         segment_bboxes.append([x0, y0, x1, y1])
     
     print("segment bboxes: ", segment_bboxes)
@@ -120,6 +123,9 @@ def parse_GPT_answer(indir, outdir):
 
     print("total words: ", total_words)
     print("correct total words: ", len(starts))
+    if total_words != len(starts):
+        print("Two numbers doesn't match! Exitting")
+        exit()
 
     dir_name = os.path.join(outdir, "highlighted_slides")
     if os.path.exists(dir_name):
@@ -134,7 +140,7 @@ def parse_GPT_answer(indir, outdir):
         highlighteds.append(slide_copy)
         cv2.imwrite(os.path.join(dir_name, str(i)+'.jpg'), slide_copy)
     
-    print(segment_starts)
-    print(len(segment_starts))
-    exit()
+    # print(segment_starts)
+    # print(len(segment_starts))
+    # exit()
     create_image_video(indir, outdir, slide, highlighteds, segment_starts, segment_ends)
