@@ -65,6 +65,10 @@ def parse_GPT_answer(indir, outdir):
     segment_cells = re.findall(r'refers to region[s]* (.*?)[, ]', gpt_answer)
     segment_contents = re.findall(r'Segment \d+: "(.*?)"', gpt_answer)
 
+    # print(segment_contents)
+    # print(words)
+    # exit()
+
     # fixes mismatch between GPT segments and whisper words
     lens = []
     seg_splits = []
@@ -93,6 +97,9 @@ def parse_GPT_answer(indir, outdir):
                 while idx < len(words) and (w.lower() != words[idx].lower()):
                     lens[i-1] += 1
                     idx += 1
+                    print("idx: ", idx)
+                    print(w.lower())
+                    print(words[idx].lower())
                 print("w: ", w)
                 print("w2: ", words[idx])
                 print("successful match after modification")
@@ -103,25 +110,30 @@ def parse_GPT_answer(indir, outdir):
         tot_len += l
     print("tot len after fix: ", tot_len)
 
-    exit()
+    # shove the remaining into the last segment
+    lens[-1] += len(words) - tot_len
     # 
 
     
     print("segment cells: ", segment_cells)
     segment_bboxes = []
     for c in segment_cells:
-        cs = c.split("-")
-        print(cs)
-        j0 = int(ord(cs[0][0])) - 65 # x0, y0 depend on the first entry
-        i0 = int(cs[0][1])
-        j1 = int(ord(cs[-1][0])) - 65 # x1, y1 depend on the last entry
-        i1 = int(cs[-1][1])
+        # first check if is valid
+        if c[0].isupper() and c[-1].isdigit():
+            cs = c.split("-")
+            print(cs)
+            j0 = int(ord(cs[0][0])) - 65 # x0, y0 depend on the first entry
+            i0 = int(cs[0][1])
+            j1 = int(ord(cs[-1][0])) - 65 # x1, y1 depend on the last entry
+            i1 = int(cs[-1][1])
 
-        x0 = int(i0 * width / n_horizotnal)
-        y0 = int(j0 * height / n_vertical)
-        x1 = int((i1+1) * width / n_horizotnal)
-        y1 = int((j1+1) * height / n_vertical)
-        segment_bboxes.append([x0, y0, x1, y1])
+            x0 = int(i0 * width / n_horizotnal)
+            y0 = int(j0 * height / n_vertical)
+            x1 = int((i1+1) * width / n_horizotnal)
+            y1 = int((j1+1) * height / n_vertical)
+            segment_bboxes.append([x0, y0, x1, y1])
+        else:
+            segment_bboxes.append([0, 0, width, height])
     
     print("segment bboxes: ", segment_bboxes)
 
@@ -140,6 +152,10 @@ def parse_GPT_answer(indir, outdir):
         print("Two numbers doesn't match! Exitting")
         exit()
 
+    print("len segment_bboxes: ", len(segment_bboxes))
+    print("len segment_starts: ", len(segment_starts))
+    # exit()
+
     dir_name = os.path.join(outdir, "highlighted_slides")
     if os.path.exists(dir_name):
         shutil.rmtree(dir_name)
@@ -153,7 +169,8 @@ def parse_GPT_answer(indir, outdir):
         highlighteds.append(slide_copy)
         cv2.imwrite(os.path.join(dir_name, str(i)+'.jpg'), slide_copy)
     
-    # print(segment_starts)
-    # print(len(segment_starts))
-    # exit()
+    print(segment_starts)
+    print("num segment starts: ", len(segment_starts))
+    print("num segment bboxes: ", len(segment_bboxes))
+    
     create_image_video(indir, outdir, slide, highlighteds, segment_starts, segment_ends)

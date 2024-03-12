@@ -98,7 +98,7 @@ def ask_GPT_for_answer(indir, outdir):
             ],
             }
         ],
-        max_tokens=2000,
+        max_tokens=4000,
         )
 
         answer = response.choices[0].message.content
