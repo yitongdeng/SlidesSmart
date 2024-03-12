@@ -62,6 +62,38 @@ def parse_GPT_answer(indir, outdir):
     segment_cells = re.findall(r'refers to region (.*?)\,', gpt_answer)
     segment_contents = re.findall(r'Segment \d+: "(.*?)"', gpt_answer)
 
+    # fixes mismatch between GPT segments and whisper words
+    lens = []
+    seg_splits = []
+    for segment in segment_contents:
+        seg_stripped = segment.replace(",", "").replace(".", "")
+        seg_split = seg_stripped.split()
+        seg_splits.append(seg_split)
+        lens.append(len(seg_split))
+    
+    idx = 0
+    for i in range(len(seg_splits)):
+    #for i in range(3):
+        seg_split = seg_splits[i]
+        for w in seg_split:
+            if w.lower() == words[idx].lower():
+                idx += 1
+                #print("successful match")
+            else:
+                while idx < len(words) and (w.lower() != words[idx].lower()):
+                    lens[i-1] += 1
+                    idx += 1
+                idx += 1
+                # print("w: ", w)
+                # print("w2: ", words[idx])
+                # print("successful match after modification")
+
+    tot_len = 0
+    for l in lens:
+        tot_len += l
+    # 
+
+    
     print("segment cells: ", segment_cells)
     segment_bboxes = []
     for c in segment_cells:
@@ -80,9 +112,9 @@ def parse_GPT_answer(indir, outdir):
     total_words = 0
     segment_starts = []
     segment_ends = []
-    for m in segment_contents:
+    for i in range(len(segment_contents)):
         segment_starts.append(starts[total_words])
-        num_words = countWords(m)
+        num_words = lens[i]
         total_words += num_words
         segment_ends.append(ends[total_words-1])
 
@@ -102,4 +134,7 @@ def parse_GPT_answer(indir, outdir):
         highlighteds.append(slide_copy)
         cv2.imwrite(os.path.join(dir_name, str(i)+'.jpg'), slide_copy)
     
+    print(segment_starts)
+    print(len(segment_starts))
+    exit()
     create_image_video(indir, outdir, slide, highlighteds, segment_starts, segment_ends)
