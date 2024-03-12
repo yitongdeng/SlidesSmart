@@ -32,15 +32,17 @@ def group_words(indir, outdir):
             word = words[i]
 
         if i+1 < len(words):
-            if starts[i+1] - ends[i] > 0.2:
+            if starts[i+1] - ends[i] > 0.5:
                 aggregate_words += word + ". "
                 capital_next = True
-            elif starts[i+1] - ends[i] > 0.06:
+            elif starts[i+1] - ends[i] > 0.1:
                 aggregate_words += word + ", "
             else:
                 aggregate_words += word + " "
         else:
             aggregate_words += word + "."
+        
+    print(aggregate_words)
     
     return aggregate_words
 
@@ -64,32 +66,36 @@ def ask_GPT_for_answer(indir, outdir):
         model="gpt-4-vision-preview",
         messages=[
             {"role": "system", "content": 
-            '''You are a helpful teaching assistant whose job is to caption a region of a lecture slide for a visually impaired student. The first image is the full slide, and the second image is the region you will be focusing on.
+            '''
+            You are a helpful teaching assistant in a Computer Science class. You are presented with a slide along with a transcription of the professor's lecture about this slide. Based on your understanding of text and image, your job is to break up the transcription into segments and match each segment to a slide region as separated by green lines and labeled by green text.
+
             '''},
             {
             "role": "user",
             "content": [
                 {
                 "type": "text",
-                "text": '''The professor's lecture: "So here again this is that iphone and now i'm highlighting some of the stuff down here on this processor there are six cpus two of which are big cpu cores that are supposedly good at running single threads there are four small cpu cores that are lower power and good for background stuff Then there's a whole bunch of stuff on there for camera neural networks sensing your heart monitor all this other stuff that's never even run on the cpu it's run on specialized processing."
+                "text": f'''                
+                The professor's lecture: "{group_words(indir, outdir)}"
 
                 Please provide your answer strictly in the following format:
 
-                Segment 1: "[lecture segment]" refers to region [your region proposal, e.g. “A1-C3”], because the lecture segment [what you think the lecture segment talks about] and the slide region [your region proposal] [what you think the region conveys visually].
+                Segment 1: "[lecture segment]" refers to region [your region proposal e.g. "A1-B2"], because the lecture segment [what you think the lecture segment talks about] and the slide region [your region proposal] [what you think the region conveys visually]. The two matches because [reason for believing it is a match].
 
-                Think step by step. Please be doubly careful to avoid omitting or adding new words to the original transcription -- in other words, your lecture segments must add up to exactly the original lecture transcription.
+                Think step by step. Avoid identifying a matching region based on the literal text it contains; instead match with a region based on its visual meaning.
                 ''',
                 },
                 {
                 "type": "image_url",
                 "image_url": {
                     "url": f"data:image/jpeg;base64,{base64_image}",
+                    "detail": "high"
                 },
                 },
             ],
             }
         ],
-        max_tokens=1024,
+        max_tokens=2000,
         )
 
         answer = response.choices[0].message.content
