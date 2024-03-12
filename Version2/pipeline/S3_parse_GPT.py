@@ -74,26 +74,36 @@ def parse_GPT_answer(indir, outdir):
         seg_splits.append(seg_split)
         lens.append(len(seg_split))
     
+    tot_len = 0
+    for l in lens:
+        tot_len += l
+    print("tot len before fix: ", tot_len)
+    
     idx = 0
     for i in range(len(seg_splits)):
     #for i in range(3):
         seg_split = seg_splits[i]
         for w in seg_split:
             if w.lower() == words[idx].lower():
+                print("w: ", w)
+                print("w2: ", words[idx])
+                print("successful match: ", idx)
                 idx += 1
-                #print("successful match")
             else:
                 while idx < len(words) and (w.lower() != words[idx].lower()):
                     lens[i-1] += 1
                     idx += 1
+                print("w: ", w)
+                print("w2: ", words[idx])
+                print("successful match after modification")
                 idx += 1
-                # print("w: ", w)
-                # print("w2: ", words[idx])
-                # print("successful match after modification")
 
     tot_len = 0
     for l in lens:
         tot_len += l
+    print("tot len after fix: ", tot_len)
+
+    exit()
     # 
 
     
