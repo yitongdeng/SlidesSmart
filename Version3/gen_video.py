@@ -63,7 +63,18 @@ if __name__ == "__main__":
         highlighteds.append(slide_copy)
         cv2.imwrite(os.path.join(dir_name, str(i)+'.jpg'), slide_copy)
     
-    create_image_video(indir, outdir, slide, highlighteds, segment_starts, segment_ends)
+    #create_image_video(indir, outdir, slide, highlighteds, segment_starts, segment_ends)
+
+    dir_name = os.path.join(outdir, "cropped_boxes")
+    if os.path.exists(dir_name):
+        shutil.rmtree(dir_name)
+    os.makedirs(dir_name)
+
+    for i in range(len(segment_bboxes)):
+        print("processing: ", i)
+        x0, y0, x1, y1 = segment_bboxes[i]
+        img1 = slide[y0:y1, x0:x1]
+        cv2.imwrite(os.path.join(dir_name, str(i)+'.jpg'), img1)
 
     
 

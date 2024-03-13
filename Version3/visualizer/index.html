@@ -1,0 +1,66 @@
+<head>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Courier Prime' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        document
+            .addEventListener("DOMContentLoaded",
+                function () {
+                    // Code to be executed when the DOM is ready
+                    console.log("DOM ready!");
+                });
+    </script>
+</head>
+<body>
+    <h1>Select Example</h1>
+    <h4>Available Example Names:</h4>
+    <ul id = "list">
+        <li>149_2_14_table</li>
+        <li>149_1_65_graphics</li>
+        <li>248_10_59_equation</li>
+        <li>149_13_16_timeline</li>
+        <li>149_1_31_schematics</li>
+        <li>149_1_52_plot</li>
+        <li>149_7_37_code</li>
+        <li>149_13_19_timeline</li>
+        <li>248_5_49_graphics</li>
+        <li>248_10_76_graphics</li>
+        <li>248_11_10_equation</li>
+    </ul>
+    <input type="text" id="test"  value="" />
+    <button onclick="submit(document.getElementById('test').value)" id="testButton">Submit</button>
+    
+    <hr>
+    <h1>Final Result</h1>
+    <div class="videoWrapper" id="finalVideoWrapper">
+        <video id="finalVideo" width = "1000" src="" controls>
+        </video>
+    </div>
+
+    <hr>
+    <h1>Comparison with V1</h1>
+    <div class="videoWrapper" id="comparisonVideoWrapper">
+        <video id="comparisonVideo" width = "1600" src="" controls>
+        </video>
+    </div>
+    
+    <hr>
+    <h1>Region-Slide Matching</h1>
+    <div id="table_holder2">
+        <table class = "fixed3" id="matchTable">
+            <thead>
+                <tr>    
+                    <th>Index</th>
+                    <th>Lecture</th>
+                    <th>Slide Region</th>
+                    <th>Justification</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
