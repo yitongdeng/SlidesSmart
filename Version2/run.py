@@ -22,9 +22,8 @@ if __name__ == "__main__":
     # audio_to_words(indir, outdir)
     # print("+++ Ask GPT +++")
     # ask_GPT_for_answer(indir, outdir)
-    # print("+++ Parse GPT +++")
-    # parse_GPT_answer(indir, outdir)
-
+    print("+++ Parse GPT +++")
+    parse_GPT_answer(indir, outdir)
     print("+++ Crop Bbox +++")
     crop_GPT_boxes(indir, outdir)
 

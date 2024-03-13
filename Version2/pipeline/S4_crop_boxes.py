@@ -86,6 +86,9 @@ def crop_GPT_boxes(indir, outdir):
             j1 = int(ord(cs[-1][0])) - 65 # x1, y1 depend on the last entry
             i1 = int(cs[-1][1])
 
+            i0, i1 = min(i0, i1), max(i0, i1)
+            j0, j1 = min(j0, j1), max(j0, j1)
+
             x0 = int(i0 * width / n_horizotnal)
             y0 = int(j0 * height / n_vertical)
             x1 = int((i1+1) * width / n_horizotnal)

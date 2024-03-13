@@ -38,6 +38,11 @@ def countWords(string):
     # Return the number of words
     return wc
 
+def process_bbox(bbox):
+    new_bbox = [min(bbox[0], bbox[2]), min(bbox[1], bbox[3]), max(bbox[0], bbox[2]), max(bbox[1], bbox[3])]
+    print("new_bbox: ", new_bbox)
+    return new_bbox
+
 def parse_GPT_answer(indir, outdir):
     slide = cv2.imread(os.path.join(outdir, 'presegmented.jpg'))
 
@@ -126,6 +131,9 @@ def parse_GPT_answer(indir, outdir):
             i0 = int(cs[0][1])
             j1 = int(ord(cs[-1][0])) - 65 # x1, y1 depend on the last entry
             i1 = int(cs[-1][1])
+
+            i0, i1 = min(i0, i1), max(i0, i1)
+            j0, j1 = min(j0, j1), max(j0, j1)
 
             x0 = int(i0 * width / n_horizotnal)
             y0 = int(j0 * height / n_vertical)
