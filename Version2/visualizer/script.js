@@ -16,6 +16,15 @@ function submit(input) {
   video.setAttribute("controls","controls")
   container.appendChild(video);
   video.style.border = '1px solid red';
+
+  var container = document.getElementById("comparisonVideoWrapper");
+  container.innerHTML = "";
+  var video = document.createElement('video');
+  video.src = `http://127.0.0.1:8080/${input}/merged.mp4`;
+  video.width = 1600;
+  video.setAttribute("controls","controls")
+  container.appendChild(video);
+  video.style.border = '1px solid red';
 }
 
 function populate_table(jsonObj, table, input) {
