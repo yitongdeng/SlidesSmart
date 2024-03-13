@@ -1,7 +1,7 @@
 let example_name;
 
 function submit(input) {
-  fetch(`http://127.0.0.1:8080/${input}/answer.json`)
+  fetch(`http://127.0.0.1:8080/Version2/results/${input}/answer.json`)
    .then(response => response.json())
    .then(data => {
      populate_table(data, document.getElementById('matchTable'), input);
@@ -11,7 +11,7 @@ function submit(input) {
   var container = document.getElementById("finalVideoWrapper");
   container.innerHTML = "";
   var video = document.createElement('video');
-  video.src = `http://127.0.0.1:8080/${input}/image_video.mp4`;
+  video.src = `http://127.0.0.1:8080/Version2/results/${input}/image_video.mp4`;
   video.width = 1000;
   video.setAttribute("controls","controls")
   container.appendChild(video);
@@ -20,7 +20,7 @@ function submit(input) {
   var container = document.getElementById("comparisonVideoWrapper");
   container.innerHTML = "";
   var video = document.createElement('video');
-  video.src = `http://127.0.0.1:8080/${input}/merged.mp4`;
+  video.src = `http://127.0.0.1:8080/Version2/results/${input}/merged.mp4`;
   video.width = 1600;
   video.setAttribute("controls","controls")
   container.appendChild(video);
@@ -60,7 +60,7 @@ function populate_table(jsonObj, table, input) {
     ${matches[idx][1]}
     </td>
     <td>
-    <img src = "http://127.0.0.1:8080/${input}/cropped_boxes/${idx}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">
+    <img src = "http://127.0.0.1:8080/Version2/results/${input}/cropped_boxes/${idx}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">
     </td>
     <td>
     Segment ${matches2[idx][0]}

@@ -1,23 +1,23 @@
 let example_name;
 
 function submit(input) {
-  fetch(`http://127.0.0.1:8080/${input}/segments_processed.json`)
+  fetch(`http://127.0.0.1:8080/Version1/results/${input}/segments_processed.json`)
    .then(response => response.json())
    .then(data => {
      obj = populate_table(data, document.getElementById('registerTable'));
     });
 
-  fetch(`http://127.0.0.1:8080/${input}/captions.json`)
+  fetch(`http://127.0.0.1:8080/Version1/results/${input}/captions.json`)
     .then(response => response.json())
     .then(data => {
       obj = populate_caption_table(data, document.getElementById('captionTable'), input);
      });
 
-  fetch(`http://127.0.0.1:8080/${input}/segments_processed.json`)
+  fetch(`http://127.0.0.1:8080/Version1/results/${input}/segments_processed.json`)
      .then(response => response.json())
      .then(data => {
        populate_match_table_1(data, document.getElementById('matchTable'));
-       return fetch(`http://127.0.0.1:8080/${input}/matched_result.json`);
+       return fetch(`http://127.0.0.1:8080/Version1/results/${input}/matched_result.json`);
       })
      .then(response => response.json())
      .then(data2 => {
@@ -31,7 +31,7 @@ function submit(input) {
   var container = document.getElementById("finalVideoWrapper");
   container.innerHTML = "";
   var video = document.createElement('video');
-  video.src = `http://127.0.0.1:8080/${input}/image_video.mp4`;
+  video.src = `http://127.0.0.1:8080/Version1/results/${input}/image_video.mp4`;
   video.width = 1000;
   video.setAttribute("controls","controls")
   container.appendChild(video);
@@ -40,18 +40,18 @@ function submit(input) {
   var container2 = document.getElementById("textVideoWrapper");
   container2.innerHTML = "";
   var video2 = document.createElement('video');
-  video2.src = `http://127.0.0.1:8080/${input}/text_video.mp4`;
+  video2.src = `http://127.0.0.1:8080/Version1/results/${input}/text_video.mp4`;
   video2.width = 1000;
   video2.setAttribute("controls","controls")
   container2.appendChild(video2);
   video2.style.border = '1px solid red';
 
   var DINO_proposal = document.getElementById("DINOproposal");
-  DINO_proposal.src = `http://127.0.0.1:8080/${input}/region_preds.jpg`;
+  DINO_proposal.src = `http://127.0.0.1:8080/Version1/results/${input}/region_preds.jpg`;
   var OCR_proposal = document.getElementById("OCRproposal");
-  OCR_proposal.src = `http://127.0.0.1:8080/${input}/OCR_preds.jpg`;
+  OCR_proposal.src = `http://127.0.0.1:8080/Version1/results/${input}/OCR_preds.jpg`;
   var Final_proposal = document.getElementById("Finalproposal");
-  Final_proposal.src = `http://127.0.0.1:8080/${input}/pruned.jpg`;
+  Final_proposal.src = `http://127.0.0.1:8080/Version1/results/${input}/pruned.jpg`;
 }
 
 function populate_text(jsonObj, textbox) {
@@ -106,7 +106,7 @@ function populate_caption_table(jsonObj, table, input) {
         #${idx}
         </td>
         <td>
-        <img src = "http://127.0.0.1:8080/${input}/proposed_regions/${idx}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">
+        <img src = "http://127.0.0.1:8080/Version1/results/${input}/proposed_regions/${idx}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">
         </td>
         <td>
         ${obj}
@@ -154,7 +154,7 @@ function populate_caption_table(jsonObj, table, input) {
       let match = parseInt(matches[1], 10); 
       //console.log(match);
       if (match >= 0){
-        testCell2.innerHTML = `<img src = "http://127.0.0.1:8080/${input}/proposed_regions/${match}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">`;
+        testCell2.innerHTML = `<img src = "http://127.0.0.1:8080/Version1/results/${input}/proposed_regions/${match}.jpg" style="max-height:150px; max-width:400px; height:auto; width:auto;">`;
       }
       //onsole.log(data[i])
    }
