@@ -17,7 +17,7 @@ def help_parse(answer, slide_shape):
         s_bboxes = []
         YN = s.split(",")[0]
         if YN == "Yes":
-            segment_cells = re.findall(r'the relevant region is (.*?)[, ]', s)
+            segment_cells = re.findall(r'([A-Z]\d-[A-Z]\d)', s)
             c = segment_cells[0]
             if c[0].isupper() and c[-1].isdigit():
                 cs = c.split("-")
