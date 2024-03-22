@@ -18,10 +18,10 @@ if __name__ == "__main__":
 
     os.makedirs(outdir, exist_ok=True)
 
-    # print("+++ Presegment +++")
-    # presegment_slide(indir, outdir)
-    # print("+++ Ask GPT +++")
-    # ask_GPT_for_answer(indir, outdir)
+    print("+++ Presegment +++")
+    presegment_slide(indir, outdir)
+    print("+++ Ask GPT +++")
+    ask_GPT_for_answer(indir, outdir)
     print("+++ Parse GPT +++")
     parse_GPT_answer(indir, outdir)
     # print("+++ Print +++")

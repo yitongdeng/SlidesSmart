@@ -18,6 +18,8 @@ def help_parse(answer, slide_shape):
         YN = s.split(",")[0]
         if YN == "Yes":
             segment_cells = re.findall(r'([A-Z]\d-[A-Z]\d)', s)
+            if len(segment_cells) == 0:
+                segment_cells = re.findall(r'([A-Z]\d)', s)
             c = segment_cells[0]
             if c[0].isupper() and c[-1].isdigit():
                 cs = c.split("-")

@@ -61,7 +61,7 @@ Yes, the relevant region is [A1-B2 where A1 and B2 are replaced with the two cor
 
 No, because [why you think a match cannot be found]
 
-Think step by step.
+Think step by step. Match with regions that are part of illustrations or diagrams, instead of pure text of code.
                     ''',
                     },
                     {
