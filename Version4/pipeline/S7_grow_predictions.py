@@ -38,7 +38,7 @@ def paint_bboxes(img, bboxes):
     mask = cv2.GaussianBlur(mask, (55, 55), 0) 
     img1 *= base + (1-base) * mask[..., np.newaxis]
     return img1.astype(np.uint8)
-    
+
 def ask_GPT_yes_no(image_path, text):
     client = OpenAI()
     # Getting the base64 string
@@ -240,18 +240,20 @@ def grow_preds(indir, outdir):
         f = open(os.path.join(indir, "processed_annotation.json"))
         segments_loaded = json.load(f)
 
-        # if len(inter[0])>=4:
-        #     answers = []
-        #     for idx in range(len(inter)):
-        #         answer = ask_GPT_yes_no(os.path.join(dir_name_i, str(idx)+'.jpg'), segments_loaded[i]['text'])
-        #         answers.append(answer)
-        #     with open(os.path.join(dir_name_i, "GPT_yes_no.json"), 'w') as f:
-        #         json.dump(answers, f, ensure_ascii=False)
+        if len(inter[0])>=4:
+            answers = []
+            for idx in range(len(inter)):
+                answer = ask_GPT_yes_no(os.path.join(dir_name_i, str(idx)+'.jpg'), segments_loaded[i]['text'])
+                answers.append(answer)
+            with open(os.path.join(dir_name_i, "GPT_yes_no.json"), 'w') as f:
+                json.dump(answers, f, ensure_ascii=False)
 
     with open(os.path.join(dir_name, "intersect_bboxes.json"), 'w') as f:
         json.dump(intersect_bboxes, f, ensure_ascii=False)
 
 def process_intersections(indir, outdir):
+    dir_name = os.path.join(outdir, "pred_growth")
+
     slide = cv2.imread(os.path.join(outdir, 'pruned.jpg'))
 
     f = open(os.path.join(outdir, "GPT_1.json"))
@@ -264,11 +266,30 @@ def process_intersections(indir, outdir):
 
     f = open(os.path.join(outdir, "pred_growth", "intersect_bboxes.json"))
     intersect_bboxes = json.load(f)
+
+    #prune intersect_bboxes from gpt
+    new_intersect_bboxes = []
+    for i in range(len(intersect_bboxes)):
+        inter = intersect_bboxes[i]
+        if len(intersect_bboxes[i][0]) < 1:
+            new_intersect_bboxes.append(intersect_bboxes[i])
+        else:
+            curr_bboxes = []
+            inter, _ = nms(inter, [0.5 for _ in range(len(inter))], 0.1)
+            f = open(os.path.join(dir_name, str(i), "GPT_yes_no.json"))
+            GPT_answer = json.load(f)
+            for idx in range(len(GPT_answer)):
+                yes_no = re.findall(r'\s|,|[^,\s]+', GPT_answer[idx])[0]
+                print("yes no: ",  yes_no)
+                if yes_no == "Yes":
+                    curr_bboxes.append(inter[idx])
+            new_intersect_bboxes.append(curr_bboxes)
+    print("NEW: ", new_intersect_bboxes)
+    intersect_bboxes = new_intersect_bboxes
+
     grown_bboxes = []
     for i in range(len(intersect_bboxes)):
         grown_bboxes.append([bb_list_union(intersect_bboxes[i])])
-
-    dir_name = os.path.join(outdir, "pred_growth")
 
     print(intersect_bboxes)
     print(grown_bboxes)
