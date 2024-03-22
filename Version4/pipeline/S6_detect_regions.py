@@ -116,7 +116,7 @@ def prune_regions(indir, outdir):
     for d in data2: # OCR boxes
         b = d["box"]
         area_b = (b[2]-b[0]) * (b[3]-b[1])
-        if area_b * 300 < imgsize: # set prune size (smaller for OCR)
+        if area_b * 5000 < imgsize: # set prune size (smaller for OCR)
             bboxes.append(b)
             certainties.append(d["certainty"])
 
@@ -128,7 +128,7 @@ def prune_regions(indir, outdir):
         b = bboxes[i]
         c = certainties[i]
         area_b = (b[2]-b[0]) * (b[3]-b[1])
-        if area_b * 6 < imgsize: # set prune size
+        if area_b * 10 < imgsize: # set prune size
             new_bboxes.append(b)
             new_certainties.append(c)
     

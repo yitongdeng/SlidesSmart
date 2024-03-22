@@ -13,6 +13,8 @@ from .S2_ask_GPT import *
 
 from openai import OpenAI
 
+use_GPT = False
+
 def paint_bboxes(img, bboxes):
     base = 0.5
     img1 = deepcopy(img).astype(np.float32)
@@ -138,7 +140,7 @@ def grow_bbox(bbox, other_bboxes):
     intersecteds = []
     for other in other_bboxes:
         iou = bb_iou(bbox, other)
-        if iou > 0.15:
+        if iou > 0.5:
             intersecteds.append(other)
     if len(intersecteds) < 1:
         intersecteds.append([])
@@ -232,21 +234,25 @@ def grow_preds(indir, outdir):
             cv2.rectangle(slide_copy2, (start_x, start_y), (end_x, end_y), (0, 0, 255), 2)
             cv2.imwrite(os.path.join(dir_name_i, 'raw.jpg'), slide_copy2)
             if len(bbox)>=4:
-                slide_copy = copy.deepcopy(slide_orig)
+                slide_copy2 = copy.deepcopy(slide_orig)
                 x0, y0, x1, y1 = bbox
-                img1 = slide_copy[y0:y1, x0:x1]
+                #start_x, start_y, end_x, end_y = bbox
+                img1 = slide_copy2[y0:y1, x0:x1]
+                print(bbox)
+                #img1 = cv2.rectangle(slide_copy2, (start_x, start_y), (end_x, end_y), (0, 0, 255), 3)#paint_bboxes(slide_copy, [bbox])
                 cv2.imwrite(os.path.join(dir_name_i, str(idx)+'.jpg'), img1)
 
         f = open(os.path.join(indir, "processed_annotation.json"))
         segments_loaded = json.load(f)
 
-        if len(inter[0])>=4:
-            answers = []
-            for idx in range(len(inter)):
-                answer = ask_GPT_yes_no(os.path.join(dir_name_i, str(idx)+'.jpg'), segments_loaded[i]['text'])
-                answers.append(answer)
-            with open(os.path.join(dir_name_i, "GPT_yes_no.json"), 'w') as f:
-                json.dump(answers, f, ensure_ascii=False)
+        if use_GPT:
+            if len(inter[0])>=4:
+                answers = []
+                for idx in range(len(inter)):
+                    answer = ask_GPT_yes_no(os.path.join(dir_name_i, str(idx)+'.jpg'), segments_loaded[i]['text'])
+                    answers.append(answer)
+                with open(os.path.join(dir_name_i, "GPT_yes_no.json"), 'w') as f:
+                    json.dump(answers, f, ensure_ascii=False)
 
     with open(os.path.join(dir_name, "intersect_bboxes.json"), 'w') as f:
         json.dump(intersect_bboxes, f, ensure_ascii=False)
@@ -267,25 +273,26 @@ def process_intersections(indir, outdir):
     f = open(os.path.join(outdir, "pred_growth", "intersect_bboxes.json"))
     intersect_bboxes = json.load(f)
 
-    #prune intersect_bboxes from gpt
-    new_intersect_bboxes = []
-    for i in range(len(intersect_bboxes)):
-        inter = intersect_bboxes[i]
-        if len(intersect_bboxes[i][0]) < 1:
-            new_intersect_bboxes.append(intersect_bboxes[i])
-        else:
-            curr_bboxes = []
-            inter, _ = nms(inter, [0.5 for _ in range(len(inter))], 0.1)
-            f = open(os.path.join(dir_name, str(i), "GPT_yes_no.json"))
-            GPT_answer = json.load(f)
-            for idx in range(len(GPT_answer)):
-                yes_no = re.findall(r'\s|,|[^,\s]+', GPT_answer[idx])[0]
-                print("yes no: ",  yes_no)
-                if yes_no == "Yes":
-                    curr_bboxes.append(inter[idx])
-            new_intersect_bboxes.append(curr_bboxes)
-    print("NEW: ", new_intersect_bboxes)
-    intersect_bboxes = new_intersect_bboxes
+    if use_GPT:
+        #prune intersect_bboxes from gpt
+        new_intersect_bboxes = []
+        for i in range(len(intersect_bboxes)):
+            inter = intersect_bboxes[i]
+            if len(intersect_bboxes[i][0]) < 1:
+                new_intersect_bboxes.append(intersect_bboxes[i])
+            else:
+                curr_bboxes = []
+                inter, _ = nms(inter, [0.5 for _ in range(len(inter))], 0.1)
+                f = open(os.path.join(dir_name, str(i), "GPT_yes_no.json"))
+                GPT_answer = json.load(f)
+                for idx in range(len(GPT_answer)):
+                    yes_no = re.findall(r'\s|,|[^,\s]+', GPT_answer[idx])[0]
+                    print("yes no: ",  yes_no)
+                    if yes_no == "Yes":
+                        curr_bboxes.append(inter[idx])
+                new_intersect_bboxes.append(curr_bboxes)
+        print("NEW: ", new_intersect_bboxes)
+        intersect_bboxes = new_intersect_bboxes
 
     grown_bboxes = []
     for i in range(len(intersect_bboxes)):
