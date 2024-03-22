@@ -9,17 +9,56 @@ import copy
 import shutil
 from ext.process_video import *
 
+def help_parse(answer, slide_shape):
+    height, width, _ = slide_shape
+
+    all_bboxes = []
+    for s in answer:
+        s_bboxes = []
+        YN = s.split(",")[0]
+        if YN == "Yes":
+            segment_cells = re.findall(r'the relevant region is (.*?)[, ]', s)
+            c = segment_cells[0]
+            if c[0].isupper() and c[-1].isdigit():
+                cs = c.split("-")
+                # print(cs)
+                j0 = int(ord(cs[0][0])) - 65 # x0, y0 depend on the first entry
+                i0 = int(cs[0][1])
+                j1 = int(ord(cs[-1][0])) - 65 # x1, y1 depend on the last entry
+                i1 = int(cs[-1][1])
+
+                i0, i1 = min(i0, i1), max(i0, i1)
+                j0, j1 = min(j0, j1), max(j0, j1)
+
+                x0 = int(i0 * width / n_horizotnal)
+                y0 = int(j0 * height / n_vertical)
+                x1 = int((i1+1) * width / n_horizotnal)
+                y1 = int((j1+1) * height / n_vertical)
+                s_bboxes.append([x0, y0, x1, y1])
+        else:
+            s_bboxes.append([])
+        
+        all_bboxes.append(s_bboxes)
+    
+    return all_bboxes
+
+
 def parse_GPT_answer(indir, outdir):
     slide = cv2.imread(os.path.join(outdir, 'presegmented.jpg'))
 
     f = open(os.path.join(indir, "processed_annotation.json"))
     segments_loaded = json.load(f)
 
+    f = open(os.path.join(outdir, "GPT_1.json"))
+    GPT_1 = json.load(f)
+
+    bboxes = help_parse(GPT_1, slide.shape)
+
     highlighteds = []
     for i in range(len(segments_loaded)):
         print("processing segment: ", i)
         slide_copy = copy.deepcopy(slide)
-        slide_copy = paint_bboxes(slide_copy, segments_loaded[i]["bboxes"])
+        slide_copy = paint_bboxes(slide_copy, bboxes[i])
         highlighteds.append(slide_copy)
 
     create_image_video(indir, outdir, slide, highlighteds, [s["start"] for s in segments_loaded], [s["end"] for s in segments_loaded])
