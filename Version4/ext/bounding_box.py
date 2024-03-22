@@ -46,7 +46,7 @@ def interval_dist_1D(r1, r2):
      return 0
 
 def merge_horizontal_step(bboxes, centers, words):
-    horizontal_margin = 50
+    horizontal_margin = 20
     vertical_margin = 20
     new_bboxes = []
     new_centers = []

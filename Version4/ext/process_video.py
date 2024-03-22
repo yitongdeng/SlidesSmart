@@ -18,15 +18,16 @@ def paint_bboxes(img, bboxes):
             x0, y0, x1, y1 = 0, 0, img1.shape[1], img1.shape[0]
         else:
             x0, y0, x1, y1 = bbox
-        xc = int(0.5 * (x0 + x1))
-        yc = int(0.5 * (y0 + y1))
-        Rw = x1 - x0 # rectangle width
-        Rh = y1 - y0 # rectangle height
-        A = int(Rw/np.sqrt(2))
-        B = int(Rh/np.sqrt(2))
-        #cv2.rectangle(img1, (x0, y0), (x1, y1), (255, 0, 0), 4)
-        dist = (x-xc) ** 2 / A ** 2 + (y-yc) ** 2 / B ** 2
-        mask[dist < 1] = 1
+        # xc = int(0.5 * (x0 + x1))
+        # yc = int(0.5 * (y0 + y1))
+        # Rw = x1 - x0 # rectangle width
+        # Rh = y1 - y0 # rectangle height
+        # A = int(Rw/np.sqrt(2))
+        # B = int(Rh/np.sqrt(2))
+        # #cv2.rectangle(img1, (x0, y0), (x1, y1), (255, 0, 0), 4)
+        # dist = (x-xc) ** 2 / A ** 2 + (y-yc) ** 2 / B ** 2
+        # mask[dist < 1] = 1
+        mask[y0:y1, x0:x1] = 1
                             
     mask = cv2.GaussianBlur(mask, (55, 55), 0) 
     img1 *= base + (1-base) * mask[..., np.newaxis]
