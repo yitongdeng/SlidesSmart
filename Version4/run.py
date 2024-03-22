@@ -20,14 +20,16 @@ if __name__ == "__main__":
 
     # print("+++ Presegment +++")
     # presegment_slide(indir, outdir)
+    # print("+++ Print +++")
+    # print_texts(indir, outdir)
     # # print("+++ Audio to words +++")
     # # audio_to_words(indir, outdir)
     # # print("+++ Ask GPT +++")
     # # ask_GPT_for_answer(indir, outdir)
-    # print("+++ Parse GPT +++")
-    # parse_GPT_answer(indir, outdir)
-    print("+++ Print +++")
-    print_texts(indir, outdir)
+    print("+++ Parse GPT +++")
+    parse_GPT_answer(indir, outdir)
+    # print("+++ Print +++")
+    # print_texts(indir, outdir)
 
 
 
