@@ -26,11 +26,12 @@ if __name__ == "__main__":
     # print("+++ Parse GPT +++")
     # parse_GPT_answer(indir, outdir)
     
-    print("+++ Detecting Regions +++")
+    #print("+++ Detecting Regions +++")
     #detect_regions(indir, outdir)
-    prune_regions(indir, outdir)
+    #prune_regions(indir, outdir)
     print("__Growing Predictions___")
-    grow_preds(indir, outdir)
+    #grow_preds(indir, outdir)
+    process_intersections(indir, outdir)
 
 
     # print("+++ Print +++")

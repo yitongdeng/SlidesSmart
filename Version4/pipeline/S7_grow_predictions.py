@@ -8,6 +8,91 @@ from .S0_presegment import *
 import copy
 import shutil
 from ext.process_video import *
+from .S6_detect_regions import *
+from .S2_ask_GPT import *
+
+from openai import OpenAI
+
+def paint_bboxes(img, bboxes):
+    base = 0.5
+    img1 = deepcopy(img).astype(np.float32)
+    mask = np.zeros([img1.shape[0], img1.shape[1]])
+    dist = np.zeros([img1.shape[0], img1.shape[1]])
+    x, y = np.meshgrid(np.arange(img1.shape[1]), np.arange(img1.shape[0]))
+    for bbox in bboxes:
+        if len(bbox) < 4:
+            x0, y0, x1, y1 = 0, 0, img1.shape[1], img1.shape[0]
+        else:
+            x0, y0, x1, y1 = bbox
+        # xc = int(0.5 * (x0 + x1))
+        # yc = int(0.5 * (y0 + y1))
+        # Rw = x1 - x0 # rectangle width
+        # Rh = y1 - y0 # rectangle height
+        # A = int(Rw/np.sqrt(2))
+        # B = int(Rh/np.sqrt(2))
+        # #cv2.rectangle(img1, (x0, y0), (x1, y1), (255, 0, 0), 4)
+        # dist = (x-xc) ** 2 / A ** 2 + (y-yc) ** 2 / B ** 2
+        # mask[dist < 1] = 1
+        mask[y0:y1, x0:x1] = 1
+                            
+    mask = cv2.GaussianBlur(mask, (55, 55), 0) 
+    img1 *= base + (1-base) * mask[..., np.newaxis]
+    return img1.astype(np.uint8)
+    
+def ask_GPT_yes_no(image_path, text):
+    client = OpenAI()
+    # Getting the base64 string
+    base64_image = encode_image(image_path)
+    print("text at hand: ", text)
+
+    try:
+        response = client.chat.completions.create(
+        model="gpt-4-vision-preview",
+        messages=[
+            {"role": "system", "content": 
+            '''
+You are a helpful teaching assistant in a Computer Science class. You are given with a region of a slide (image) and a segment from the lecture (text). Your task is to tell whether the image represents the central object discussed in the text.
+            '''},
+            {
+            "role": "user",
+            "content": [
+                {
+                "type": "text",
+                "text": f'''                
+The text: "{text.rstrip()}"
+
+Please answer strictly in one of the following formats:
+
+Yes, because [why you think the image is the central object].
+
+No, because [why you think the image is not the central object].
+
+Think step by step.
+                ''',
+                },
+                {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{base64_image}",
+                    "detail": "high"
+                },
+                },
+            ],
+            }
+        ],
+        max_tokens=4000,
+        temperature=0.2,
+        top_p = 0.1,
+        )
+
+        answer = response.choices[0].message.content
+        print("GPT answer: \n", answer)
+
+    except Exception as error:
+        print("Encountered Exception: \n", error)
+        answer = "GPT generation failed"
+
+    return answer
 
 def bb_iou(boxA, boxB):
     # determine the (x, y)-coordinates of the intersection rectangle
@@ -120,13 +205,73 @@ def grow_preds(indir, outdir):
         grown_bboxes.append([grown])
         intersect_bboxes.append(intersect)
 
-    #print("grown_bboxes: ", grown_bboxes)
-
     dir_name = os.path.join(outdir, "pred_growth")
     if os.path.exists(dir_name):
         shutil.rmtree(dir_name)
     os.makedirs(dir_name)
 
+    slide_orig = cv2.imread(os.path.join(indir, 'slide.jpg'))
+    for i in range(len(segments_loaded)):
+        slide_copy2 = copy.deepcopy(slide_orig)
+        inter = intersect_bboxes[i]
+        print("num intersections:", len(inter))
+        if len(inter) > 1:
+            inter, _ = nms(inter, [0.5 for _ in range(len(inter))], 0.1)
+        print("num intersections afterwards:", len(inter))
+        dir_name_i = os.path.join(dir_name, str(i))
+        if os.path.exists(dir_name_i):
+            shutil.rmtree(dir_name_i)
+        os.makedirs(dir_name_i)
+        idx = -1
+        for bbox in inter:
+            idx+=1
+            if len(bbox)>=4:
+                start_x, start_y, end_x, end_y = bbox
+            else:
+                start_x, start_y, end_x, end_y = 0, 0, 0, 0
+            cv2.rectangle(slide_copy2, (start_x, start_y), (end_x, end_y), (0, 0, 255), 2)
+            cv2.imwrite(os.path.join(dir_name_i, 'raw.jpg'), slide_copy2)
+            if len(bbox)>=4:
+                slide_copy = copy.deepcopy(slide_orig)
+                x0, y0, x1, y1 = bbox
+                img1 = slide_copy[y0:y1, x0:x1]
+                cv2.imwrite(os.path.join(dir_name_i, str(idx)+'.jpg'), img1)
+
+        f = open(os.path.join(indir, "processed_annotation.json"))
+        segments_loaded = json.load(f)
+
+        # if len(inter[0])>=4:
+        #     answers = []
+        #     for idx in range(len(inter)):
+        #         answer = ask_GPT_yes_no(os.path.join(dir_name_i, str(idx)+'.jpg'), segments_loaded[i]['text'])
+        #         answers.append(answer)
+        #     with open(os.path.join(dir_name_i, "GPT_yes_no.json"), 'w') as f:
+        #         json.dump(answers, f, ensure_ascii=False)
+
+    with open(os.path.join(dir_name, "intersect_bboxes.json"), 'w') as f:
+        json.dump(intersect_bboxes, f, ensure_ascii=False)
+
+def process_intersections(indir, outdir):
+    slide = cv2.imread(os.path.join(outdir, 'pruned.jpg'))
+
+    f = open(os.path.join(outdir, "GPT_1.json"))
+    GPT_1 = json.load(f)
+
+    bboxes = help_parse(GPT_1, slide.shape)
+
+    f = open(os.path.join(indir, "processed_annotation.json"))
+    segments_loaded = json.load(f)
+
+    f = open(os.path.join(outdir, "pred_growth", "intersect_bboxes.json"))
+    intersect_bboxes = json.load(f)
+    grown_bboxes = []
+    for i in range(len(intersect_bboxes)):
+        grown_bboxes.append([bb_list_union(intersect_bboxes[i])])
+
+    dir_name = os.path.join(outdir, "pred_growth")
+
+    print(intersect_bboxes)
+    print(grown_bboxes)
     for i in range(len(segments_loaded)):
         print("processing segment: ", i)
         print(bboxes[i])
